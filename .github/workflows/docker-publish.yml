@@ -1,24 +1,23 @@
-name: Build and Publish Docker Image to DockerHub
+name: Build and Push Docker Image to Docker Hub
 
-on:
-  push:
-    branches: ["main"]
-
+on: push
 jobs:
-  build:
+  push_to_registry:
+    name: push docker image to hub
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - name: check repository
+        uses: actions/checkout@v4
 
-      - name: DockerHub Login
-        uses: docker/login-action@v2.1.0
+      - name: login to docker registry
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_PASSWORD}}
 
-      - name: Build the Docker image
-        run: docker build . --e-commerce-frontend-main --tag ${{ secrets.DOCKERHUB_USERNAME }}
-
-      - name: Docker Push
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}
+      - name: build and push docker image to registry
+        uses: docker/build-push-action@v5
+        with:
+          context: DockerFileFolder/e-commerce-frontend-main
+          push: true
+          tags: black1512/demo1:latest
