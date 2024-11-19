@@ -22,3 +22,5 @@ jobs:
           file: ./e-commerce-frontend-main/Dockerfile  # Specify the Dockerfile if needed
           push: true
           tags: black1512/demo1:latest
+      - name: List files in context
+        run: ls -R ./e-commerce-frontend-main
